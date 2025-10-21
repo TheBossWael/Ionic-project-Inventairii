@@ -1,0 +1,66 @@
+<ion-content [fullscreen]="true" class="ion-padding login-bg" scrollEvents="false" keyboard-attach="false" [scrollY]="false">
+  <div class="logo-box">
+      <!-- Remplace par ton logo : assets/logo.png -->
+      <img src="/assets/logo.png" alt="logo" class="logo" />
+  </div>
+  <div class="login-card" >
+    <h1>Register</h1>
+
+    <ion-list>
+      <!-- Username -->
+      <ion-item [class.invalid]="username && username.trim() === ''">
+        <ion-icon slot="start" name="person-outline"></ion-icon>
+        <ion-input [(ngModel)]="username" placeholder="Username" type="text"></ion-input>
+      </ion-item>
+
+      <!-- Email -->
+      <ion-item [class.invalid]="email && !val.isEmailValid(email)">
+        <ion-icon slot="start" name="mail-outline"></ion-icon>
+        <ion-input [(ngModel)]="email" placeholder="email@domain.com" type="email"></ion-input>
+      </ion-item>
+
+      <!-- Password -->
+      <ion-item [class.invalid]="password && password.trim() === ''">
+        <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
+        <ion-input [(ngModel)]="password" [type]="showPassword ? 'text' : 'password'" placeholder="Enter password"></ion-input>
+        <ion-button fill="clear" slot="end" (click)="togglePassword()" aria-label="Show/hide password" type="button">
+          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+      <!-- Role Dropdown -->
+      <ion-item>
+        <ion-icon slot="start" name="people-outline"></ion-icon>
+        <ion-select [(ngModel)]="role" placeholder="Select Role">
+          <ion-select-option value="employee">Employee</ion-select-option>
+          <ion-select-option value="manager">Manager</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Special Password for Managers -->
+      <ion-item *ngIf="role === 'manager'" [class.invalid]="specialPassword && specialPassword.trim() === ''">
+        <ion-icon slot="start" name="key-outline"></ion-icon>
+        <ion-input [(ngModel)]="specialPassword" [type]="showSpecialPassword ? 'text' : 'password'" placeholder="manager password"></ion-input>
+        <ion-button fill="clear" slot="end" (click)="toggleSpecialPassword()" type="button">
+          <ion-icon [name]="showSpecialPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+
+    <!-- Register Button -->
+    <ion-button expand="block" class="login-button" [disabled]="isRegisterDisabled" (click)="register()">
+      Register
+    </ion-button>
+
+    <!-- Already have account -->
+    <div class="signup-container">
+      <div class="divider"></div>
+      <div class="signup-message">
+        <span>Already have an account?</span>
+        <ion-button fill="outline" size="small" color="primary" class="signup-btn" (click)="goToLogin()">
+          Login
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

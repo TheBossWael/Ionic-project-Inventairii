@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar class="all-items-toolbar ion-text-center">
+    <div class="toolbar-top">
+      <ion-title>All Items</ion-title>
+      <ion-searchbar placeholder="Search items..."></ion-searchbar>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="item-card">
+    <div *ngIf="items().length > 0;" class="table-header">
+      <span class="col-name">Product</span>
+      <span class="col-qty">Quantity</span>
+    </div>
+
+      <ion-list *ngIf="items().length > 0; else noItems" lines="full" class="item-list">
+      <ion-item *ngFor="let item of items()" class="table-row" (click)="openItemDetails(item.barcode)">
+        <ion-avatar slot="start" class="item-image">
+          <img [src]="item.photo" alt="{{item.name}}" />
+        </ion-avatar>
+        <ion-label class="list-name">
+          <h2>{{ item.name }}</h2>
+        </ion-label>
+        <ion-label class="list-qty">
+          <p>{{ item.quantity }}</p>
+        </ion-label>
+        <ion-button *ngIf="authorized()" fill="clear" color="danger" class="list-actions" (click)="confirmDelete(item.barcode); $event.stopPropagation()" >
+          <ion-icon [icon]="trashBinIcon"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+
+    <ng-template #noItems>
+      <ion-list lines="full" class="noitem-list">
+      <ion-item class="table-row">
+        <ion-label class="list-qty">
+      <p class="ion-text-center">No items available.</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>    </ng-template>
+  </ion-card>
+</ion-content>
+
+

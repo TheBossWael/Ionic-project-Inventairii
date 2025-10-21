@@ -1,0 +1,70 @@
+<ion-content [fullscreen]="true" class="ion-padding login-bg">
+  <div class="login-card">
+    <h1>Add New Item</h1>
+
+    <form [formGroup]="itemForm" (ngSubmit)="submitItem()">
+
+      <!-- Photo -->
+      <ion-item (click)="takePhoto()" button>
+        <ion-icon slot="start" name="camera-outline"></ion-icon>
+        <ion-label>
+          {{ selectedFile ? 'Photo selected' : 'Tap to take a photo' }}
+        </ion-label>
+      </ion-item>
+
+      <!-- Optional preview -->
+      <div *ngIf="selectedFile" class="photo-preview">
+        <img [src]="selectedFile" alt="Preview" />
+      </div>
+
+      <!-- Name -->
+      <ion-item [class.invalid]="itemForm.get('name')?.invalid && itemForm.get('name')?.touched">
+        <ion-icon slot="start" name="document-text-outline"></ion-icon>
+        <ion-input placeholder="Name" formControlName="name"></ion-input>
+      </ion-item>
+
+      <!-- Category -->
+      <ion-item [class.invalid]="itemForm.get('category')?.invalid && itemForm.get('category')?.touched">
+        <ion-icon slot="start" name="pricetag-outline"></ion-icon>
+        <ion-input placeholder="Category" formControlName="category"></ion-input>
+      </ion-item>
+
+      <!-- Price -->
+      <ion-item [class.invalid]="itemForm.get('price')?.invalid && itemForm.get('price')?.touched">
+        <ion-icon slot="start" name="cash-outline"></ion-icon>
+        <ion-input type="number" placeholder="Price" formControlName="price"></ion-input>
+      </ion-item>
+
+      <!-- Quantity -->
+      <ion-item [class.invalid]="itemForm.get('quantity')?.invalid && itemForm.get('quantity')?.touched">
+        <ion-icon slot="start" name="cube-outline"></ion-icon>
+        <ion-input type="number" placeholder="Quantity" formControlName="quantity"></ion-input>
+      </ion-item>
+
+      <!-- Barcode -->
+      <ion-item [class.invalid]="itemForm.get('barcode')?.invalid && itemForm.get('barcode')?.touched">
+        <ion-icon slot="start" name="barcode-outline"></ion-icon>
+        <ion-input placeholder="Barcode" formControlName="barcode"></ion-input>
+      </ion-item>
+
+      <!-- Description -->
+      <ion-item>
+        <ion-icon slot="start" name="create-outline"></ion-icon>
+        <ion-textarea placeholder="Description" formControlName="description"></ion-textarea>
+      </ion-item>
+
+
+
+      <!-- Save Button -->
+      <ion-button expand="block" class="login-button" type="submit" [disabled]="itemForm.invalid || !selectedFile">
+        Save Item
+      </ion-button>
+
+      <!-- Cancel Button -->
+      <ion-button expand="block" color="medium" type="button" (click)="cancel()">
+        Cancel
+      </ion-button>
+
+    </form>
+  </div>
+</ion-content>

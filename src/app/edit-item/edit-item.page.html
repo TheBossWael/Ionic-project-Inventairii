@@ -1,0 +1,87 @@
+
+
+<ion-content [fullscreen]="true" class="ion-padding login-bg">
+  <div class="details-container">
+    <div class="-card">
+    <div class="edit-header">
+      <ion-icon name="arrow-back-outline" (click)="closeModal()"></ion-icon>
+      <h1>Edit Item "{{ item.name }}"</h1>
+    </div>
+
+    <form [formGroup]="itemForm" (ngSubmit)="submitItem()">
+
+      <!-- Optional preview -->
+      <div *ngIf="selectedFile" class="photo-preview">
+        <img [src]="selectedFile" alt="Preview" />
+      </div>
+    <ion-card class="item-card">
+
+      <!-- Photo -->
+      <ion-item (click)="takePhoto()" button>
+        <ion-icon slot="start" name="camera-outline"></ion-icon>
+        <ion-label>
+          {{ selectedFile ? 'Photo selected' : 'Tap to take a photo' }}
+        </ion-label>
+      </ion-item>
+
+      <!-- Name -->
+      <ion-item>
+        <ion-label>
+          <strong>Name:</strong>
+          <ion-input placeholder="Name" formControlName="name"></ion-input>
+        </ion-label>
+      </ion-item>
+
+      <!-- Category -->
+      <ion-item>
+        <ion-label>
+          <strong>Category:</strong>
+          <ion-input placeholder="Category" formControlName="category"></ion-input>
+        </ion-label>
+      </ion-item>
+
+      <!-- Price -->
+      <ion-item>
+        <ion-label>
+          <strong>Price:</strong>
+          <ion-input type="number" placeholder="Price" formControlName="price"></ion-input>
+        </ion-label>
+      </ion-item>
+
+      <!-- Quantity -->
+      <ion-item>
+        <ion-label>
+          <strong>Quantity:</strong>
+          <ion-input type="number" placeholder="Quantity" formControlName="quantity"></ion-input>
+        </ion-label>
+      </ion-item>
+
+      <!-- Barcode (disabled) -->
+      <ion-item>
+        <ion-label>
+          <strong>Barcode:</strong>
+          <ion-input placeholder="Barcode" formControlName="barcode"></ion-input>
+        </ion-label>
+      </ion-item>
+
+      <!-- Description -->
+      <ion-item>
+        <ion-label>
+          <strong>Description:</strong>
+          <ion-textarea placeholder="Description" formControlName="description"></ion-textarea>
+        </ion-label>
+      </ion-item>
+  </ion-card>
+      <!-- Save Button -->
+      <ion-button expand="block" class="login-button" type="submit" [disabled]="itemForm.invalid">
+        Save Changes
+      </ion-button>
+
+      <!-- Cancel Button -->
+      <ion-button expand="block" color="medium" type="button" (click)="closeModal()">
+        Cancel
+      </ion-button>
+    </form>
+      </div>
+  </div>
+</ion-content>

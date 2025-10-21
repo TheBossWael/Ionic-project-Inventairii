@@ -1,0 +1,115 @@
+
+.all-items-toolbar {
+  display: flex;
+  flex-direction: column;
+  --background: #113559; /* primary color */
+  color: white;
+  border-radius: 0 0 20px 20px;
+  padding: 10px;
+  z-index: 1;
+  position: absolute
+}
+
+.toolbar-top {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+ion-title {
+  margin-top: 20px;
+}
+
+ion-searchbar {
+  --border-radius: 20px;
+  --background: white;
+  margin-bottom: 30px;
+}
+
+
+.item-card {
+  --background: #b1b1b1;  /* card color */
+  border-radius: 20px 20px 0 0;
+  margin: 0 0px;
+  padding: 10px;
+  height: 100%;
+  margin-top: 100px;
+  z-index: 2;
+
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 10px 5px;
+  margin-top: 55px;
+  position: absolute;
+}
+
+.item-list {
+  margin-top: 5px;
+  padding: 0;
+  border-radius: 30px;
+    margin-top: 100px;
+
+}
+
+.table-row {
+  display: flex;
+  align-items: center;
+  height: 80px;
+
+}
+
+.item-image {
+  width: 60px;
+  height: 60px;
+  margin-right: 10px;
+}
+
+.col-name {
+  margin-left:100px ;
+  font-size: 1.1rem;
+
+}
+
+.col-qty {
+  margin-left:25px ;
+    font-size: 1.1rem;
+}
+p{
+  font-size: 1.1rem;
+  font-weight:bold;
+}
+.list-actions {
+  font-size: 1.1rem;
+}
+.list-name {
+  flex: 2;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.list-qty {
+  flex: 2;
+  font-size: 1.2rem;
+  text-align: center;
+}
+ion-item::part(native) {
+  border: none !important;
+}
+.no-items {
+  padding: 2rem 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #333;
+
+}
+.noitem-list {
+  margin-top: 100px;
+  padding: 0;
+  border-radius: 30px;
+}

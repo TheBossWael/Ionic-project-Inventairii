@@ -1,0 +1,29 @@
+<ion-content [fullscreen]="true" class="ion-padding login-bg">
+  <div class="login-card">
+    <h1>Forgot Password</h1>
+
+    <ion-list>
+      <ion-item [class.invalid]="email && !val.isEmailValid(email)">
+        <ion-icon slot="start" name="mail-outline"></ion-icon>
+        <ion-input
+          [(ngModel)]="email"
+          type="email"
+          placeholder="Enter your email"
+        ></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" class="login-button" (click)="sendResetLink()">
+      Send
+    </ion-button>
+
+    <!-- Back button -->
+    <div class="back-btn-container">
+      <ion-button style="color:black;" fill="clear" size="small" (click)="closeModal()">
+        <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+        Back
+      </ion-button>
+    </div>
+
+</div>
+</ion-content>

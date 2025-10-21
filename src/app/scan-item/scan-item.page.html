@@ -1,0 +1,38 @@
+<!-- <ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home" text="" icon="arrow-back"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="isCodeConfirmed; else scanning">
+    <h2>Scanned Code:</h2>
+    <p class="code-display">{{ scannedCode }}</p>
+
+    <div class="button-group">
+      <ion-button color="medium" (click)="retry()">Retry</ion-button>
+      <ion-button color="warning" (click)="editCode()">Edit</ion-button>
+      <ion-button color="success" (click)="continue()">Continue</ion-button>
+    </div>
+  </div>
+
+  <ng-template #scanning>
+    <p>Opening camera...</p>
+  </ng-template>
+</ion-content>
+
+ -->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Scan Product</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-text-center">
+  <ion-button color="primary" (click)="simulateScan()">Enter Test Barcode</ion-button>
+</ion-content>

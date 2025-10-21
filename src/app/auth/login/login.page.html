@@ -1,0 +1,67 @@
+<ion-content [fullscreen]="true" class="ion-padding login-bg" [scrollY]="false">
+      <div class="logo-box">
+      <!-- Remplace par ton logo : assets/logo.png -->
+      <img src="/assets/logo.png" alt="logo" class="logo" />
+    </div>
+  <div class="login-card">
+    <h1>Login</h1>
+
+    <ion-list>
+
+      <!-- Email Input -->
+      <ion-item [class.invalid]="email && !val.isEmailValid(email)">
+        <ion-icon slot="start" name="mail-outline"></ion-icon>
+        <ion-input
+          [(ngModel)]="email"
+          type="email"
+          placeholder="email@domain.com"
+          inputmode="email"
+        ></ion-input>
+      </ion-item>
+
+      <!-- Password Input -->
+      <ion-item [class.invalid]="password && password.trim() === ''">
+        <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
+        <ion-input
+          [(ngModel)]="password"
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Enter password"
+        ></ion-input>
+        <ion-button
+          fill="clear"
+          slot="end"
+          (click)="togglePassword()"
+          aria-label="Show/hide password"
+          type="button"
+        >
+          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+
+    <!-- ✅ disable button if invalid -->
+    <ion-button expand="block" class="login-button" [disabled]="isLoginDisabled" (click)="login()">
+      Login
+    </ion-button>
+
+    <ion-button fill="clear" size="small" (click)="forgotPassword()" class="forgot-link">
+      Forgot Password?
+    </ion-button>
+        <!-- 🆕 Sign Up Section -->
+<div class="signup-container">
+  <div class="divider"></div>
+  <div class="signup-message">
+    <span>Don't have an account?</span>
+    <ion-button
+      fill="outline"
+      size="small"
+      color="primary"
+      class="signup-btn"
+      (click)="signUp()"
+    >
+      Sign Up
+    </ion-button>
+  </div>
+</div>
+  </div>
+</ion-content>

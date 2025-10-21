@@ -1,0 +1,72 @@
+<ion-content *ngIf="!loading" [fullscreen]="true" class="ion-padding login-bg ">
+  <div class="details-container">
+    <div class="login-card">
+      <h1>"{{ item.name }}" Details:</h1>
+
+      <div class="photo-preview" *ngIf="item.photo">
+        <img [src]="item.photo" alt="Item photo" />
+      </div>
+
+    <ion-card class="item-card">
+      <ion-item>
+        <ion-label>
+          <strong>Name:</strong> {{ item.name }}
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <strong>Category:</strong> {{ item.category }}
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <strong>Price:</strong> {{ item.price | currency }}
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <strong>Quantity:</strong> {{ item.quantity }}
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <strong>Barcode:</strong> {{ item.barcode }}
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <strong>Description:</strong> {{ item.description || 'No description' }}
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <strong>Added By:</strong> {{ item.addedBy }}
+        </ion-label>
+      </ion-item>
+
+      <ion-item *ngIf="!authorized" color="warning">
+        <ion-label>
+          ⚠️ You are not authorized to edit this item.
+        </ion-label>
+      </ion-item>
+  </ion-card>
+      <ion-button *ngIf="authorized" expand="block" style="--background: #113559;" (click)="editItem()">
+        Edit Item
+      </ion-button>
+      <ion-button class="backBtn" expand="block" color="medium" (click)="back()">
+        Back
+      </ion-button>
+    </div>
+  </div>
+
+</ion-content>
+
+<ion-content *ngIf="loading" class="ion-padding">
+  <p>Loading item...</p>
+</ion-content>

@@ -1,0 +1,37 @@
+.login-bg {
+  background: url('/assets/wave-haikei.png') no-repeat center / cover;
+}
+
+.login-card {
+  max-width: 36rem;
+  width: calc(100% - 2.5rem);
+  margin: 20vh auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1.25rem rgba(0,0,0,0.12);
+  text-align: center;
+}
+
+ion-item.invalid {
+  border: 1px solid #ff4d4f;
+  background: rgba(255, 77, 79, 0.05);
+  border-radius: 0.6rem;
+}
+
+.login-button {
+  --background: #113559;
+  --color: #fff;
+  margin-top: 1rem;
+}
+.forgot-link {
+  color: #113559;
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+.back-btn-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  color:black;
+}

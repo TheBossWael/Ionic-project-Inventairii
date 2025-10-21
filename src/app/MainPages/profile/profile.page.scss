@@ -1,0 +1,37 @@
+.login-bg {
+    --background: #b1b1b1;  /* card color */
+}
+
+.login-card {
+  max-width: 36rem;
+  width: calc(100% - 1rem);
+  margin: 40vh auto 0;
+  transform: translateY(-45%);
+  padding: 2rem;
+  background: rgba(255,255,255,0.92);
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1.25rem rgba(0,0,0,0.12);
+  text-align: center;
+}
+
+ion-item.invalid {
+  border: 1px solid #ff4d4f;
+  background: rgba(255,77,79,0.05);
+  border-radius: 8px;
+}
+
+.save-button {
+  --background: #113559;
+  --color: #fff;
+  --border-radius: 0.75rem;
+  margin-top: 1rem;
+  padding: 0.6rem 0;
+}
+.logout-button {
+  --background:#113559;
+  --color: #fff;
+  --border-radius: 0.75rem;
+    margin-top: 0.2rem;
+
+}
+

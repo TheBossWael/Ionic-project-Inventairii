@@ -1,0 +1,75 @@
+<ion-content [fullscreen]="true" class="ion-padding login-bg">
+  <div class="login-card">
+    <h1>Edit Profile</h1>
+
+    <ion-list>
+      <!-- Email -->
+      <ion-item [class.invalid]="email && !val.isEmailValid(email)">
+        <ion-icon slot="start" name="mail-outline"></ion-icon>
+        <ion-input
+          [(ngModel)]="email"
+          placeholder="New Email"
+          type="email"
+        ></ion-input>
+      </ion-item>
+
+      <!-- New Password -->
+      <ion-item [class.invalid]="newPassword && !val.isPasswordValid(newPassword)">
+        <ion-icon slot="start" name="lock-open-outline"></ion-icon>
+        <ion-input
+          [(ngModel)]="newPassword"
+          [type]="showNewPassword ? 'text' : 'password'"
+          placeholder="New Password"
+        ></ion-input>
+        <ion-button fill="clear" slot="end" (click)="toggleNewPassword()" type="button">
+          <ion-icon [name]="showNewPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+      <!-- Role -->
+      <ion-item>
+        <ion-icon slot="start" name="people-outline"></ion-icon>
+        <ion-select [(ngModel)]="role" placeholder="Select Role">
+          <ion-select-option value="employee">Employee</ion-select-option>
+          <ion-select-option value="manager">Manager</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Special Manager Password -->
+      <ion-item *ngIf="role === 'manager'" [class.invalid]="specialPassword && specialPassword.trim() === ''">
+        <ion-icon slot="start" name="key-outline"></ion-icon>
+        <ion-input
+          [(ngModel)]="specialPassword"
+          [type]="showSpecialPassword ? 'text' : 'password'"
+          placeholder="Manager Key"
+        ></ion-input>
+        <ion-button fill="clear" slot="end" (click)="toggleSpecialPassword()" type="button">
+          <ion-icon [name]="showSpecialPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+
+          <!-- Old Password -->
+      <ion-item [class.invalid]="oldPassword && !val.isPasswordValid(oldPassword)">
+        <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
+        <ion-input
+          [(ngModel)]="oldPassword"
+          [type]="showOldPassword ? 'text' : 'password'"
+          placeholder="Old Password"
+        ></ion-input>
+        <ion-button fill="clear" slot="end" (click)="toggleOldPassword()" type="button">
+          <ion-icon [name]="showOldPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+    <!-- Save Button -->
+    <ion-button expand="block" class="save-button" [disabled]="isSaveDisabled" (click)="saveChanges()">
+      Save Changes
+    </ion-button>
+
+        <!-- Logout Button -->
+    <ion-button expand="block" class="logout-button" (click)="logout()">
+      Logout
+    </ion-button>
+  </div>
+</ion-content>

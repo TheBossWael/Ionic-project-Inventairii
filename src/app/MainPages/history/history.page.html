@@ -1,0 +1,13 @@
+@if (authorized()) {
+  <!-- page content -->
+} @else {
+  <ion-card style="margin-top: 50%;" color="danger" class="ion-text-center">
+    <ion-card-header>
+      <ion-card-title>🔒 Access Denied</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>You are not authorized to view this page,</p>
+      <p>This screen is reserved to managers.</p>
+    </ion-card-content>
+  </ion-card>
+}
