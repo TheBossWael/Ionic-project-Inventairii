@@ -1,4 +1,4 @@
-export type ItemAction = 'added' | 'deleted' | 'edited' | 'decremented one';
+export type ItemAction = 'added' | 'deleted' | 'edited' | 'decremented';
 
 export interface HistoryElementModel {
   description: string;

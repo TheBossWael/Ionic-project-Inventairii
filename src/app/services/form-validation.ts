@@ -4,6 +4,7 @@ import { ToastController } from '@ionic/angular';
 @Injectable({
   providedIn: 'root',
 })
+
 export class FormValidation {
   private readonly MANAGER_KEY = 'wlh rani manager';
 

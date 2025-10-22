@@ -28,7 +28,12 @@ export class LoginPage {
   ) {}
 
   async login() {
+      const isValid = !this.isLoginDisabled;
 
+      if (!isValid) {
+        await this.val.showToast('Please fill all required fields correctly', 'warning');
+        return; // 🚫 Stop execution if validation fails
+      }
     try {
       const user = await this.auth.login(this.email, this.password);
       await this.val.showToast(`Welcome ${user.Username}`, 'success');

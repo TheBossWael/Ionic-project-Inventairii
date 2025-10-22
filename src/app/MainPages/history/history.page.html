@@ -1,13 +1,68 @@
-@if (authorized()) {
-  <!-- page content -->
-} @else {
-  <ion-card style="margin-top: 50%;" color="danger" class="ion-text-center">
-    <ion-card-header>
-      <ion-card-title>🔒 Access Denied</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>You are not authorized to view this page,</p>
-      <p>This screen is reserved to managers.</p>
-    </ion-card-content>
-  </ion-card>
-}
+<ion-content>
+
+  <!-- Loading spinner -->
+  <div *ngIf="loading()" class="ion-text-center" style="margin-top: 50%;">
+    <ion-spinner></ion-spinner>
+    <p>Loading history...</p>
+  </div>
+
+
+  <!-- Authorized users -->
+  @if (!loading()){
+      <ion-header class="header">
+      <ion-toolbar class="all-items-toolbar ion-text-center">
+        <div class="toolbar-top">
+          <ion-title>Items History</ion-title>
+          <ion-searchbar placeholder="search item..."></ion-searchbar>
+        </div>
+      </ion-toolbar>
+    </ion-header>
+    @if (authorized()) {
+      <ion-list *ngIf="historyElements().length > 0; else noHistory" class="ion-padding">
+
+        <ion-item *ngFor="let entry of historyElements()">
+          <ion-avatar slot="start">
+            <ion-icon
+              [name]="getIcon(entry.action)"
+              [style.color]="getColor(entry.action)"
+              size="large">
+            </ion-icon>
+          </ion-avatar>
+
+          <ion-label>
+            <p>{{ entry.description }}</p>
+            <h2>
+              <strong>{{ entry.addedBy }}</strong>
+              <span style="color: gray;">
+                {{ getActionText(entry.action) }}
+              </span>
+              <strong style="color: var(--ion-color-primary);">"{{ entry.ModifiedItem }}"</strong>
+            </h2>
+            <small style="color: gray;">
+              <ion-icon name="time-outline" style="vertical-align: middle; margin-right: 4px;"></ion-icon>
+              {{ entry.time | date:'short' }}
+            </small>
+          </ion-label>
+        </ion-item>
+
+      </ion-list>
+
+      <ng-template #noHistory>
+        <p class="ion-text-center" style="margin-top: 70%; color: gray;">No history records found.</p>
+      </ng-template>
+    }
+
+    <!-- Unauthorized users -->
+    @else {
+      <ion-card style="margin-top: 40%;" color="danger" class="ion-text-center">
+        <ion-card-header>
+          <ion-card-title>🔒 Access Denied</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>You are not authorized to view this page.</p>
+          <p>This section is reserved for managers only.</p>
+        </ion-card-content>
+      </ion-card>
+    }
+  }
+</ion-content>

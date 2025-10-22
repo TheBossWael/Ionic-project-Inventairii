@@ -10,6 +10,7 @@ import { IonSearchbar, } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular/standalone';
 import { ItemSharedService } from 'src/app/services/item-shared-service';
 import { Router } from '@angular/router';
+import { HistoryFirebaseService } from 'src/app/services/history-service';
 
 @Component({
   selector: 'app-home',
@@ -30,7 +31,7 @@ export class HomePage implements OnInit {
     private ItemSharedService : ItemSharedService,
     private auth: AuthService,
     private alertCtrl: AlertController,
-    private router: Router
+    private router: Router,
   ) {}
 
   async ngOnInit() {

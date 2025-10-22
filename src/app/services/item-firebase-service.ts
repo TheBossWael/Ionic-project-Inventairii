@@ -4,10 +4,13 @@ import { db } from '../firebase-config.js';
 import {collection, orderBy, getDocs, query, where, addDoc, serverTimestamp, deleteDoc, doc} from 'firebase/firestore';
 import { ItemModel } from '../models/itemModel.js';
 import { updateDoc } from 'firebase/firestore';
+import { HistoryFirebaseService } from './history-service.js';
+import { AuthService } from './auth-service.js';
 
 
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
+  constructor(private historyService: HistoryFirebaseService, private auth : AuthService) {}
 
   // 🔹 Get item by barcode
   async getItemByCode(code: string): Promise<any | null> {
@@ -54,6 +57,14 @@ export class FirebaseService {
         createdAt: serverTimestamp(),
       });
 
+      //log history
+      const currentUser = await this.auth.user();
+      await this.historyService.addHistoryElement({
+        description: "added item",
+        addedBy: currentUser?.Username ?? 'Unknown',
+        action: 'added',
+        ModifiedItem: itemData.name,
+      });
       console.log('✅ Item added successfully!');
     } catch (error) {
       console.error('Error adding item:', error);
@@ -83,8 +94,16 @@ export class FirebaseService {
         console.log("⚠️ No item found");
         return;
       }
-
       await deleteDoc(doc(db, 'items', item.id));
+
+      //log history
+      const currentUser = await this.auth.user();
+      await this.historyService.addHistoryElement({
+        description: "deleted item",
+        addedBy: currentUser?.Username ?? 'Unknown',
+        action: 'deleted',
+        ModifiedItem: item.name,
+      });
       console.log("Item deleted successfully");
     } catch (error) {
       console.error('Error deleting item:', error);
@@ -106,12 +125,52 @@ export class FirebaseService {
         // to add optional field for tracking edits
       });
 
+      //log history
+      const currentUser = await this.auth.user();
+      await this.historyService.addHistoryElement({
+        description: "edited item",
+        addedBy: currentUser?.Username ?? 'Unknown',
+        action: 'edited',
+        ModifiedItem: item.name,
+      });
       console.log('✅ Item updated successfully!');
     } catch (error) {
       console.error('Error updating item:', error);
       throw error;
     }
   }
+// Decrement item quantity by a given amount
+async decrementItemQuantity(barcode: string, amount: number = 1): Promise<void> {
+  try {
+    if (amount <= 0) throw new Error('Amount to decrement must be positive');
+
+    const item = await this.getItemByCode(barcode);
+    if (!item || !item.id) throw new Error('Item not found');
+
+    if (typeof item.quantity !== 'number' || item.quantity <= 0) {
+      throw new Error('Item quantity is already zero');
+    }
+
+    const newQuantity = Math.max(item.quantity - amount, 0); // prevent negative
+    const itemRef = doc(db, 'items', item.id);
+
+    await updateDoc(itemRef, { quantity: newQuantity });
+
+    // Log history
+    const currentUser = await this.auth.user();
+    await this.historyService.addHistoryElement({
+      description: `Decreased quantity by ${amount}`,
+      addedBy: currentUser?.Username ?? 'Unknown',
+      action: 'decremented',
+      ModifiedItem: item.name,
+    });
+
+    console.log(`✅ Quantity of "${item.name}" decremented by ${amount}. New quantity: ${newQuantity}`);
+  } catch (error) {
+    console.error('Error decrementing item quantity:', error);
+    throw error;
+  }
+}
 
 
 }

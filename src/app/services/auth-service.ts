@@ -18,6 +18,7 @@ import { updateDoc } from 'firebase/firestore';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { User } from '../models/userModel';
 import { onAuthStateChanged } from 'firebase/auth';
+import { effect } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -37,7 +38,21 @@ export class AuthService {
     }
   });
 }
+async userAsync(): Promise<User | null> {
+  // Return immediately if user already loaded
+  if (this.user()) return this.user();
 
+  // Wait for the user signal to get a value
+  return new Promise(resolve => {
+    const stop = effect(() => {
+      const u = this.user();
+      if (u !== null) {
+        stop.destroy(); // stop listening
+        resolve(u);
+      }
+    });
+  });
+}
   // Register new user
   async register(email: string, password: string, Username: string, role: User['role']) {
     const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password);

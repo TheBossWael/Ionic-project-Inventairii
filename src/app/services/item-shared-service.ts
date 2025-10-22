@@ -25,9 +25,10 @@ export class ItemSharedService {
   // Delete item and update signal
   async deleteItem(barcode: string) {
     await this.firebaseService.deleteItemByBarcode(barcode);
+
     this.items.update(prev => prev.filter(i => i.barcode !== barcode));
   }
-  
+
     // Update item and refresh signal
   async updateItem(barcode: string, updatedData: Partial<ItemModel>) {
     await this.firebaseService.updateItem(barcode, updatedData);
@@ -37,5 +38,17 @@ export class ItemSharedService {
       )
     );
   }
+
+  async decrementItem(barcode: string, amount: number = 1) {
+  await this.firebaseService.decrementItemQuantity(barcode, amount);
+
+  this.items.update(prev =>
+    prev.map(item =>
+      item.barcode === barcode
+        ? { ...item, quantity: Math.max((item.quantity || 0) - amount, 0) }
+        : item
+    )
+  );
+}
 
 }

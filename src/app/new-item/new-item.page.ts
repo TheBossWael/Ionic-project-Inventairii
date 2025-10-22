@@ -8,7 +8,7 @@ import { AuthService } from '../services/auth-service';
 import { ItemModel } from '../models/itemModel';
 import { Router, RouterModule } from '@angular/router';
 import { ItemSharedService } from '../services/item-shared-service';
-
+import { HistoryFirebaseService } from '../services/history-service';
 
 @Component({
   selector: 'app-new-item',
@@ -29,7 +29,8 @@ export class NewItemPage {
     private validator: FormValidation,
     private ItemSharedService: ItemSharedService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private historyService : HistoryFirebaseService
   ) {
     this.itemForm = this.fb.group({
       name: ['', Validators.required],
@@ -87,6 +88,13 @@ export class NewItemPage {
     try {
       // Add item via shared service — updates HomePage automatically
       await this.ItemSharedService.addItem(itemData, this.selectedFile);
+      // Log history
+      await this.historyService.addHistoryElement({
+        description: "added item",
+        addedBy: currentUser?.Username,
+        action: 'added',
+        ModifiedItem: itemData.name,
+      });
       await this.validator.showToast('Item added successfully!', 'success');
       this.modalCtrl.dismiss();
       this.router.navigate(['/tabs/home'])
