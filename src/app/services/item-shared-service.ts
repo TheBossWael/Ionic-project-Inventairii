@@ -15,6 +15,11 @@ export class ItemSharedService {
     this.items.set(allItems);
   }
 
+    // fetch item by barcode via shared service
+  async getItemByBarcode(barcode: string) {
+    return await this.firebaseService.getItemByCode(barcode);
+  }
+  
   // Add a new item and update signal
   async addItem(itemData: Omit<ItemModel, 'photo'>, base64Image: string) {
     await this.firebaseService.addItem(itemData, base64Image);
@@ -50,5 +55,7 @@ export class ItemSharedService {
     )
   );
 }
+
+
 
 }

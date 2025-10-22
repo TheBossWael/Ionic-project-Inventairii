@@ -142,7 +142,7 @@ export class ScanItemPage {
 }
  */
 
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -161,6 +161,10 @@ import {
 } from '@ionic/angular/standalone';
 import { FirebaseService } from '../services/item-firebase-service';
 import { NewItemPage } from '../new-item/new-item.page';
+import { ItemSharedService } from '../services/item-shared-service';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth-service';
+import { EditItemPage } from '../edit-item/edit-item.page';
 
 @Component({
   selector: 'app-scan-item',
@@ -181,14 +185,20 @@ import { NewItemPage } from '../new-item/new-item.page';
 })
 export class ScanItemPage {
   scannedCode = '';
-
+  authorized = computed(() => {
+    const u = this.auth.user(); // make sure user() returns current user
+    return !!u && u.role === 'manager';
+  });
   constructor(
     private navCtrl: NavController,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private actionSheetCtrl: ActionSheetController,
     private modalCtrl: ModalController,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private ItemSharedService:ItemSharedService,
+    private router : Router,
+    private auth : AuthService
   ) {}
 
   async simulateScan() {
@@ -215,7 +225,7 @@ export class ScanItemPage {
     const actionSheet = await this.actionSheetCtrl.create({
       header: `Scanned Code: ${this.scannedCode}`,
       buttons: [
-        { text: 'Continue', icon: 'checkmark-circle-outline', handler: () => this.continue() },
+        { text: 'Continue', icon: 'checkmark-circle-outline', handler: () => this.continue(this.scannedCode) },
         { text: 'Edit Code', icon: 'create-outline', handler: () => this.editCode() },
         { text: 'Retry', icon: 'refresh-outline', handler: () => this.retry() },
         { text: 'Cancel', icon: 'close-outline', role: 'cancel' },
@@ -240,28 +250,94 @@ export class ScanItemPage {
     this.scannedCode = '';
     this.simulateScan();
   }
-/** Always open modal for testing */
-async continue() {
-  console.log('Opening modal...');
 
-  const modal = await this.modalCtrl.create({
-    component: NewItemPage,       // must be the standalone component
-    componentProps: { barcode: this.scannedCode }
-  });
+async continue(barcode: string) {
+  const existingItem = await this.ItemSharedService.getItemByBarcode(barcode);
 
-  await modal.present();
+  if (existingItem) {
+    const alert = await this.alertCtrl.create({
+      header: 'Item Already Exists',
+      subHeader: existingItem.name,
+      message: `<img src="${existingItem.photo}" style="width:100px;height:100px;object-fit:cover;margin-bottom:10px;">`,
+      inputs: [
+        {
+          name: 'decrementAmount',
+          type: 'number',
+          placeholder: 'Amount to decrement',
+          min: 1
+        }
+      ],
+      buttons: [
+        {
+          text: 'Decrement',
+          handler: async (data) => {
+            const amount = Number(data.decrementAmount);
+            // Validate input
+            if (!data.decrementAmount || isNaN(amount) || amount <= 0) {
+              // show a warning toast
+              const toast = await this.toastCtrl.create({
+                message: 'Please enter a valid amount greater than 0',
+                duration: 1000,
+                color: 'warning'
+              });
+              await toast.present();
 
-  // Optional: handle dismissal
-  const { data } = await modal.onDidDismiss();
-  if (data?.saved) {
-    const successToast = await this.toastCtrl.create({
-      message: 'New item saved successfully!',
-      duration: 1500,
-      color: 'success'
+              return false; // keep the alert open
+            }
+            await this.ItemSharedService.decrementItem(existingItem.barcode, amount);
+            await this.ItemSharedService.loadItems();
+            return true; // close alert
+          }
+        },
+        ...(this.authorized() ? [{
+          text: 'Edit',
+          handler: async () => {
+            // navigate to home first so modal back goes to home
+            await this.router.navigate(['/tabs/home'], { replaceUrl: true });
+            const modal = await this.modalCtrl.create({
+              component: EditItemPage,
+              componentProps: { item: existingItem }
+            });
+
+            modal.onDidDismiss().then(async (result) => {
+              if (result.data?.updatedItem) {
+                // Refresh item details after editing
+                await this.ItemSharedService.loadItems();
+              }
+            });
+
+            await modal.present();
+            return true;
+          }
+        }] : []),
+        { text: 'Cancel', role: 'cancel' }
+      ]
     });
-    await successToast.present();
+
+    await alert.present();
+  } else {
+    // navigate to home first so modal back goes to home
+    await this.router.navigate(['/tabs/home'], { replaceUrl: true });
+    // item does not exist: go to new item page
+    const modal = await this.modalCtrl.create({
+      component: NewItemPage,
+      componentProps: { barcode: this.scannedCode }
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data?.saved) {
+      const successToast = await this.toastCtrl.create({
+        message: 'New item saved successfully!',
+        duration: 1500,
+        color: 'success'
+      });
+      await successToast.present();
+    }
   }
 }
+
 
 
   goHome() {
