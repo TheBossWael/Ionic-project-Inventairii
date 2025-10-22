@@ -1,6 +1,6 @@
 // src/app/services/history-service.ts
 import { Injectable } from '@angular/core';
-import { collection, addDoc, getDocs, orderBy, query, getFirestore, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, orderBy, query, getFirestore, Timestamp,onSnapshot } from 'firebase/firestore';
 import { HistoryElementModel } from '../models/historyElementModel';
 
 @Injectable({
@@ -45,4 +45,19 @@ export class HistoryFirebaseService {
       return [];
     }
   }
+
+
+  subscribeToHistory(callback: (data: HistoryElementModel[]) => void) {
+    const historyRef = collection(this.db, 'history');
+    const q = query(historyRef, orderBy('time', 'desc'));
+
+    onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => {
+        const d = doc.data() as HistoryElementModel;
+        return { ...d, time: (d.time as any)?.toDate?.() ?? new Date() };
+      });
+      callback(data);
+    });
+  }
+
 }

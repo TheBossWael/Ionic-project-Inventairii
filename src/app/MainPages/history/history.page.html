@@ -13,14 +13,14 @@
       <ion-toolbar class="all-items-toolbar ion-text-center">
         <div class="toolbar-top">
           <ion-title>Items History</ion-title>
-          <ion-searchbar placeholder="search item..."></ion-searchbar>
+          <ion-searchbar placeholder="Search item..." [value]="searchQuery()" (ionInput)="onSearchChange($event)"> </ion-searchbar>
         </div>
       </ion-toolbar>
     </ion-header>
     @if (authorized()) {
-      <ion-list *ngIf="historyElements().length > 0; else noHistory" class="ion-padding">
+      <ion-list *ngIf="filteredEntries.length > 0; else noHistory" class="ion-padding">
 
-        <ion-item *ngFor="let entry of historyElements()">
+        <ion-item *ngFor="let entry of filteredEntries">
           <ion-avatar slot="start">
             <ion-icon
               [name]="getIcon(entry.action)"

@@ -2,20 +2,20 @@
   <ion-toolbar class="all-items-toolbar ion-text-center">
     <div class="toolbar-top">
       <ion-title>All Items</ion-title>
-      <ion-searchbar placeholder="Search items..."></ion-searchbar>
+      <ion-searchbar (ionInput)="onSearchChange($event)" placeholder="Search items..."></ion-searchbar>
     </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-card class="item-card">
-    <div *ngIf="items().length > 0;" class="table-header">
+    <div *ngIf="filteredItems.length > 0;" class="table-header">
       <span class="col-name">Product</span>
       <span class="col-qty">Quantity</span>
     </div>
 
-      <ion-list *ngIf="items().length > 0; else noItems" lines="full" class="item-list">
-      <ion-item *ngFor="let item of items()" class="table-row" (click)="openItemDetails(item.barcode)">
+      <ion-list *ngIf="filteredItems.length > 0; else noItems" lines="full" class="item-list">
+      <ion-item *ngFor="let item of filteredItems" class="table-row" (click)="openItemDetails(item.barcode)">
         <ion-avatar slot="start" class="item-image">
           <img [src]="item.photo" alt="{{item.name}}" />
         </ion-avatar>

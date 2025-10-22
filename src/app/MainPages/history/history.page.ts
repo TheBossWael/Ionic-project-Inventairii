@@ -18,6 +18,7 @@ export class HistoryPage implements OnInit {
   authorized = signal(false); // writable signal
   historyElements = signal<HistoryElementModel[]>([]);
   loading = signal(true);
+  searchQuery = signal(''); // search input
 
   constructor(private auth: AuthService, private firebase: HistoryFirebaseService) {}
 
@@ -33,8 +34,10 @@ async ngOnInit() {
     this.authorized.set(isManager);
 
     if (isManager) {
-      const data = await this.firebase.getAllHistory();
-      this.historyElements.set(data);
+      // Subscribe to changes in the history collection
+      this.firebase.subscribeToHistory((data) => {
+        this.historyElements.set(data);
+      });
     }
   } catch (err) {
     console.error('Error fetching user or history:', err);
@@ -72,6 +75,21 @@ getActionText(action: string): string {
     default: return 'performed an action on';
   }
 }
+
+  // Computed: filtered entries based on search
+  get filteredEntries() {
+    const q = this.searchQuery().toLowerCase();
+    if (!q) return this.historyElements();
+    return this.historyElements().filter(entry =>
+      entry.ModifiedItem.toLowerCase().includes(q) ||
+      entry.addedBy.toLowerCase().includes(q) ||
+      entry.description.toLowerCase().includes(q)
+    );
+  }
+
+  onSearchChange(event: any) {
+    this.searchQuery.set(event.detail.value || '');
+  }
 
 }
 

@@ -26,6 +26,7 @@ export class HomePage implements OnInit {
     const u = this.auth.user();
     return !!u && u.role === 'manager';
   });
+  searchQuery = signal(''); // search input
 
   constructor(
     private ItemSharedService : ItemSharedService,
@@ -36,6 +37,17 @@ export class HomePage implements OnInit {
 
   async ngOnInit() {
     await this.ItemSharedService.loadItems();
+  }
+
+    // 🔹 Filter items by name
+  get filteredItems() {
+    const q = this.searchQuery().toLowerCase();
+    if (!q) return this.items();
+    return this.items().filter(item => item.name.toLowerCase().includes(q));
+  }
+
+  onSearchChange(event: any) {
+    this.searchQuery.set(event.detail.value || '');
   }
 
   async confirmDelete(barcode: string) {
@@ -57,5 +69,6 @@ export class HomePage implements OnInit {
   }
   openItemDetails(barcode: string) {
   this.router.navigate(['/item', barcode]);
-}
+  }
+  
 }
